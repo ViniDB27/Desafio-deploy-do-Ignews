@@ -8,7 +8,7 @@
   max-width: 720px;
   margin: 5rem auto 0;
 
-  h1 { 
+  h1 {
     font-size: 3.5rem;
     font-weight: 900;
   }
@@ -42,8 +42,7 @@
       background: linear-gradient(var(--gray-100), transparent);
       background-clip: text;
       -webkit-text-fill-color: transparent;
-    } 
-
+    }
   }
 }
 
@@ -60,7 +59,7 @@
     color: var(--yellow-500);
     margin-left: 0.5rem;
 
-    &:hover{
+    &:hover {
       text-decoration: underline;
     }
   }

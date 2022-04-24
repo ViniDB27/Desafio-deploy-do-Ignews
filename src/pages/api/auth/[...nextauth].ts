@@ -1,40 +1,28 @@
 import { query as q } from 'faunadb';
-
 import NextAuth from 'next-auth';
-import { session } from 'next-auth/client';
 import Providers from 'next-auth/providers';
-import { FaUmbraco } from 'react-icons/fa';
 
 import { fauna } from '../../../services/fauna';
 
 export default NextAuth({
-  //Configure one or more authentication providers
   providers: [
     Providers.GitHub({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-      scope: 'read:user'
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      scope: 'read:user',
     }),
-    // ..add more providers here
   ],
-  // A database is optional, but required to persist accounts in a database
-  // database: process.env.DATABASE_URL,
   callbacks: {
-    //permite ter acesso ao session, modificar os dados, e retornar o session 
-    //com os dados modificados
     async session(session) {
       try {
-        //verificar se o usuários tem uma assinatura ativa
         const userActiveSubscription = await fauna.query(
           q.Get(
             q.Intersection([
-              //buscar uma subscription pela "ref" do usuário
               q.Match(
                 q.Index('subscription_by_user_ref'),
                 q.Select(
                   "ref",
                   q.Get(
-                    //buscar a "ref" do usuário pelo "email"
                     q.Match(
                       q.Index('user_by_email'),
                       q.Casefold(session.user.email)
@@ -49,25 +37,22 @@ export default NextAuth({
             ])
           )
         )
-
+  
         return {
-          //retornar os dados session e a "userActiveSubscription"
           ...session,
           activeSubscription: userActiveSubscription
-        }
+        };
       } catch {
         return {
           ...session,
-          activeSubscription: null,
-        }
+          activeSubscription: null
+        };
       }
     },
-
     async signIn(user, account, profile) {
-      //console.log(user)
-      const { email } = user
+      const { email } = user;
 
-      try {
+      try{
         await fauna.query(
           q.If(
             q.Not(
@@ -90,10 +75,13 @@ export default NextAuth({
             )
           )
         )
-        return true
+
+        return true;
       } catch {
-        return false
+        return false;
       }
-    },
+
+
+    }
   }
 })
