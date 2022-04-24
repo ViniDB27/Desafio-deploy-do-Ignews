@@ -7,17 +7,6 @@ import { stripe } from '../services/stripe';
 
 import styles from './home.module.scss';
 
-// 3 formas de popular uma pagina com informações
-
-// client-side - não indexada;
-// server-side - indexada, popular com dados dinamicos (tempo real) da section user;
-// static-site - indexada, blog;
-
-// Post do blog
-
-//Conteúdo (SSG)
-//Comentários (Clint-Side)
-
 interface HomeProps {
   product: {
     priceId: string;
@@ -42,7 +31,7 @@ export default function Home({ product }: HomeProps) {
           </p>
           <SubscribeButton />
         </section>
-        <img src="/images/avatar.svg" alt="Girl coding" />
+        <Image src="/images/avatar.svg" alt="Girl coding" />
       </main>
     </>
   )
